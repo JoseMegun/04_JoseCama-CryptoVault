@@ -1,0 +1,15 @@
+/* El logo sigue al cursor sin interferir */
+.metamask-logo {
+    position: absolute;
+    width: 52px;
+    height: 42px;
+    pointer-events: none; /* Evita interferencia con clics */
+    z-index: 1000; /* Asegura que esté por encima de todo */
+  }
+  
+  .metamask-logo img {
+    width: 100%;
+    height: 100%;
+  }
+  
+  

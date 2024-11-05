@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+    <body>
+        <div class="container">
+            <header>
+                <h1><strong>CryptoVault</strong></h1>
+                &nbsp;
+                <h2><strong>La nueva billetera digital en que puedas confiar</strong></h2>
+            </header>
+            <div class="content">
+                <div class="section">
+                    <!-- MetaMask Integration Section -->
+                    <button (click)="connectWallet()">
+                        {{ account ? "Conectado a: " + (account.substring(0, 6) + '...' + account.substring(account.length - 4)) : "Conectar MetaMask" }}
+                    </button>
+                    &nbsp;
+                    <button (click)="account ? copyToClipboard(account) : null">Copiar dirección</button>
+
+                    <h2><strong>Información de la Red:</strong></h2>
+
+                    <!-- Selección de red -->
+                    <div class="form-group">
+                        <label for="network"><strong> Selecciona la red: </strong></label>
+                        &nbsp;
+                        <select id="network" (change)="changeNetwork($event)" [(ngModel)]="network" [disabled]="!account">
+                            <option value="" disabled selected>Selecciona una red</option>
+                            <option value="1">Mainnet</option>
+                            <option value="11155111">Sepolia</option>
+                            <option value="17000">Holesky</option>
+                        </select>                        
+                    </div>
+                    <p *ngIf="balance"><strong>Tienes:</strong> {{ balance }} ETH</p>
+    
+                    <!-- Botón para mostrar/ocultar el formulario -->
+                    <button (click)="toggleForm()">
+                        {{ showForm ? 'Ocultar Envio de Fondos' : 'Mostrar Envio de Fondos' }}
+                    </button>      
+                    
+                    <!-- Formulario de transacción -->
+                    <div *ngIf="showForm">
+                        <h2><strong>Enviar fondos:</strong></h2>
+                        <form (ngSubmit)="transferFunds(recipientAddress, amount, selectedNetwork)">
+                            <div class="form-group">
+                                <label for="recipient"><strong>Dirección del destinatario:</strong></label>
+                                &nbsp;
+                                <input type="text" [(ngModel)]="recipientAddress" placeholder="Ingresa la dirección" name="recipientAddress" required />
+                            </div>
+                            <div class="form-group">
+                                <label for="amount"><strong>Monto a enviar (ETH):</strong></label>
+                                &nbsp;
+                                <input type="number" [(ngModel)]="amount" placeholder="Cantidad" name="amount" min="0" step="0.01" required />
+                            </div>
+                            <div class="form-group">
+                                <label for="network"><strong>Red de destino:</strong></label>
+                                &nbsp;
+                                <select id="network" [(ngModel)]="selectedNetwork" name="network">
+                                    <option value="1">Mainnet</option>
+                                    <option value="11155111">Sepolia</option>
+                                    <option value="17000">Holesky</option>
+                                </select>
+                            </div>
+                            <button type="submit" [disabled]="!account">Enviar</button>
+                        </form>
+                    </div>                          
+
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
