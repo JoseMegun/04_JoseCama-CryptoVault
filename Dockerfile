@@ -22,8 +22,8 @@ FROM nginx:alpine
 # Copiar los archivos compilados desde la etapa anterior
 COPY --from=build /app/dist/crypto-vault /usr/share/nginx/html
 
-# Exponer el puerto 80 para el servidor web
-EXPOSE 80
+# Exponer el puerto 4200 para el servidor web
+EXPOSE 4200
 
 # Comando para iniciar Nginx
 CMD ["nginx", "-g", "daemon off;"]
