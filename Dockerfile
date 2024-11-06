@@ -4,7 +4,7 @@ FROM node:20-alpine AS build
 # Establecer directorio de trabajo
 WORKDIR /app
 
-# Copiar los archivos de configuración y dependencias
+# Copiar package.json y package-lock.json (si existe) para instalar dependencias
 COPY package*.json ./
 
 # Instalar dependencias
@@ -21,9 +21,6 @@ FROM nginx:alpine
 
 # Copiar los archivos compilados desde la etapa anterior
 COPY --from=build /app/dist/crypto-vault /usr/share/nginx/html
-
-# Configuración personalizada para manejar rutas de Angular en Nginx
-COPY nginx.conf /etc/nginx/nginx.conf
 
 # Exponer el puerto 80 para el servidor web
 EXPOSE 80
