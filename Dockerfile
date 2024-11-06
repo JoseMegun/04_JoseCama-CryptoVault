@@ -19,6 +19,9 @@ RUN npm run build --configuration CryptoVault
 # Etapa 2: Imagen ligera de producción con servidor web Nginx
 FROM nginx:alpine
 
+# Copiar el archivo de configuración de Nginx
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
 # Copiar los archivos compilados desde la etapa anterior
 COPY --from=build /app/dist/crypto-vault /usr/share/nginx/html
 
