@@ -1,0 +1,41 @@
+name: Build
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    types: [opened, synchronize, reopened]
+jobs:
+  sonarcloud:
+    name: SonarCloud
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      - name: Log in to Docker Hub
+        run: echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+  
+      - name: Check if Docker image exists
+        id: docker_image_exists
+        run: |
+          if docker pull ${{ secrets.DOCKER_USERNAME }}/as221s6_t01_cryptovault:v1; then
+            echo "exists=true" >> $GITHUB_ENV
+          else
+            echo "exists=false" >> $GITHUB_ENV
+          fi
+
+      - name: Build Docker image
+        if: env.exists == 'false'
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/as221s6_t01_cryptovault:v1 .
+
+      - name: Push Docker image to Docker Hub
+        if: env.exists == 'false'
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/as221s6_t01_cryptovault:v1
