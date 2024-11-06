@@ -39,3 +39,4 @@ jobs:
       - name: Push Docker image to Docker Hub
         if: env.exists == 'false'
         run: docker push ${{ secrets.DOCKER_USERNAME }}/as221s6_t01_cryptovault:v1
+
