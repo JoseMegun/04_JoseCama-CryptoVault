@@ -1,0 +1,8 @@
+version: '3.8'
+
+services:
+  app:
+    image: jmegun/as221s6_t01_cryptovault:v1
+    container_name: jmegun_cryptovault
+    ports:
+      - "4200:80"
